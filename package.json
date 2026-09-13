@@ -1,0 +1,71 @@
+{
+  "name": "pi-workbench",
+  "version": "0.0.0",
+  "description": "Personal workflow tools and bundled skills for Pi.",
+  "type": "module",
+  "license": "MIT",
+  "copyright": "Copyright (c) 2026 Caseneuve",
+  "keywords": [
+    "pi-package",
+    "pi",
+    "agents",
+    "extensions"
+  ],
+  "files": [
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "scripts",
+    "extensions",
+    "skills"
+  ],
+  "pi": {
+    "extensions": [
+      "./extensions/diff-review.ts",
+      "./extensions/repo-todos.ts",
+      "./extensions/agent-journal.ts",
+      "./extensions/cwd-editor.ts",
+      "./extensions/attach-screenshot.ts"
+    ],
+    "skills": [
+      "./skills"
+    ]
+  },
+  "scripts": {
+    "check": "biome check --write --error-on-warnings . && oxlint",
+    "check:ci": "biome check --error-on-warnings .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:add-todo": "bb --config skills/add-todo/bb.edn -e \"(require 'todo.core-test 'clojure.test) (clojure.test/run-tests 'todo.core-test)\"",
+    "test:coverage": "vitest run --coverage",
+    "verify": "npm run check:ci && npm run typecheck && npm test",
+    "pack:check": "npm pack --dry-run --json",
+    "install-ag-todo-cli": "node scripts/ag-todo-cli-installer.mjs install",
+    "uninstall-ag-todo-cli": "node scripts/ag-todo-cli-installer.mjs uninstall",
+    "prepare": "node scripts/install-prek-hook.mjs"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.5",
+    "@earendil-works/pi-coding-agent": "0.85.1",
+    "@earendil-works/pi-tui": "0.85.1",
+    "@j178/prek": "0.4.14",
+    "@oxlint/plugins": "1.82.0",
+    "@types/node": "24.10.1",
+    "@vitest/coverage-v8": "4.1.9",
+    "oxlint": "1.82.0",
+    "typescript": "5.9.3",
+    "vitest": "4.1.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caseneuve/pi-workbench.git"
+  },
+  "bugs": {
+    "url": "https://github.com/caseneuve/pi-workbench/issues"
+  },
+  "homepage": "https://github.com/caseneuve/pi-workbench#readme"
+}

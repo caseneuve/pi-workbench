@@ -1,0 +1,15 @@
+# Changes to this file will be overwritten by Copier updates.
+# Review it with the template source before running `copier update`.
+_commit: v0.3.0
+_src_path: https://github.com/caseneuve/template-pi-package.git
+copyright_year: 2026
+extension_name: diff-review
+github_owner: caseneuve
+initial_version: 0.0.0
+package_description: Personal workflow tools and bundled skills for Pi.
+package_name: pi-workbench
+pi_api_version: 0.85.1
+repository_name: pi-workbench
+resource_types:
+- extensions
+- skills

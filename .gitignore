@@ -1,0 +1,6 @@
+node_modules/
+coverage/
+tools/oxlint/anti-slop/
+.reviews/
+*.log
+.DS_Store
