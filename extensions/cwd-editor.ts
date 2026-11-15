@@ -1,14 +1,15 @@
 import { readdirSync } from "node:fs";
 import path from "node:path";
-import { Key } from "@earendil-works/pi-tui";
 import type {
   ExtensionAPI,
   ExtensionContext,
 } from "@earendil-works/pi-coding-agent";
+import { Key } from "@earendil-works/pi-tui";
 import { openExternalEditor } from "./shared/external-editor";
 
 type OpenResult =
-  { ok: true; message: string } | { ok: false; message: string };
+  | { ok: true; message: string }
+  | { ok: false; message: string };
 
 async function openEditorAtPath(
   ctx: ExtensionContext,
@@ -87,7 +88,7 @@ function getPathArgumentCompletions(prefix: string, cwd: string) {
 }
 
 async function openCwdEditor(ctx: ExtensionContext, args = "") {
-  if (!ctx.hasUI) {
+  if (ctx.mode !== "tui") {
     ctx.ui.notify("/cwd-editor requires interactive mode", "error");
     return;
   }

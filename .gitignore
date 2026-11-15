@@ -4,3 +4,7 @@ tools/oxlint/anti-slop/
 .reviews/
 *.log
 .DS_Store
+
+!/.pi/
+.pi/*
+!.pi/docs/

@@ -2,7 +2,8 @@ import { spawnSync } from "node:child_process";
 import type { ExtensionUIContext } from "@earendil-works/pi-coding-agent";
 
 export type ExternalEditorResult =
-  { ok: true } | { ok: false; message: string };
+  | { ok: true }
+  | { ok: false; message: string };
 
 /** Parse the small shell command subset used by $VISUAL/$EDITOR. */
 export function parseEditorCommand(command: string): string[] | undefined {

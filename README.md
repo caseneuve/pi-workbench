@@ -19,7 +19,7 @@ Skills:
 
 ## Requirements and limitations
 
-The extensions and helpers preserve their existing Unix-oriented workflow:
+Requires Node >=22.19.0; development compatibility is tested against Pi 1.5.2 (host APIs are `*` peers, not a claim of every Pi version). The extensions and helpers preserve their existing Unix-oriented workflow:
 
 - Git is required for diff review, todo-root fallback, and journal project detection.
 - Diff review, repo-todos, agent-journal, and cwd-editor require `$VISUAL` or `$EDITOR` for editing.
@@ -34,7 +34,11 @@ Install a local checkout while developing:
 
 ```bash
 pi install ~/git/pi/pi-workbench
+# Or project-local (project resources load only after trust):
+pi install -l ~/git/pi/pi-workbench
 ```
+
+Local packages load in place; Pi does not install their dependencies. Run `npm ci` in the checkout separately for development. `/reload` reloads installed resources. `pi update` updates Pi itself; `pi update --extensions` reconciles packages. A pinned Git source does not move to a different ref.
 
 Install a reviewed immutable release in normal use:
 
@@ -73,15 +77,16 @@ Use `pi config` (or `pi config -l` for project-local settings) to enable or disa
 ## Development
 
 ```bash
-npm install
+npm ci
 npm run check:ci
 npm run typecheck
 npm test
 npm run test:add-todo
+npm run test:coverage
 npm run pack:check
 ```
 
-`npm run check` applies Biome formatting and lint fixes before running Oxlint. `npm run check:ci` is non-mutating. The add-todo helper test command is:
+`npm run check` applies Biome formatting and lint fixes. `npm run check:ci` is non-mutating. Extra local anti-slop checks are separate from portable package scripts/CI; no rules are vendored. Tooling policy was manually adopted from reviewed Copier master `0835070` (local/unpushed); original generation provenance remains in `.copier-answers.yml`, not a validated remote update. Independent skill ownership/duplicate discovery is a coordinated follow-up; current packaged skills/helpers remain unchanged. The add-todo helper test command is:
 
 ```bash
 bb --config skills/add-todo/bb.edn -e '(require (quote todo.core-test) (quote clojure.test)) (clojure.test/run-tests (quote todo.core-test))'

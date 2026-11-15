@@ -1,8 +1,11 @@
-import {
-  type ExtensionAPI,
-  type ExtensionContext,
-  type Theme,
-  type ThemeColor,
+import { spawnSync } from "node:child_process";
+import { promises as fs } from "node:fs";
+import path from "node:path";
+import type {
+  ExtensionAPI,
+  ExtensionContext,
+  Theme,
+  ThemeColor,
 } from "@earendil-works/pi-coding-agent";
 import {
   Input,
@@ -12,9 +15,6 @@ import {
   visibleWidth,
   wrapTextWithAnsi,
 } from "@earendil-works/pi-tui";
-import { spawnSync } from "node:child_process";
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import { appendEditorText } from "./shared/editor-text";
 
 type SortMode = "number" | "state" | "priority" | "type" | "labels";
@@ -724,7 +724,7 @@ async function scanTodos(cwd: string): Promise<{
   return { todosDir, roots, issues, isFallback: discovered.isFallback };
 }
 
-class RepoTodosComponent {
+export class RepoTodosComponent {
   private roots: TodoRecord[] = [];
   private todosDir: string;
   private todosDirIsFallback = false;
@@ -966,10 +966,6 @@ class RepoTodosComponent {
 
   private getVisibleChildren(todo: TodoRecord): TodoRecord[] {
     return this.getVisibleTree().childrenById.get(todo.id) ?? [];
-  }
-
-  private getVisibleRoots(): TodoRecord[] {
-    return this.getVisibleTree().roots;
   }
 
   private getVisibleRows(): FlattenedRow[] {
@@ -1403,7 +1399,7 @@ class RepoTodosComponent {
       return;
     }
 
-    if (data === "G") {
+    if (matchesKey(data, "shift+g")) {
       this.pendingG = false;
       if (this.focusPane === "preview") {
         this.previewScroll = Number.MAX_SAFE_INTEGER;
@@ -1433,7 +1429,8 @@ class RepoTodosComponent {
       this.requestRender();
       return;
     }
-    if (data === "S") {
+
+    if (matchesKey(data, "shift+s")) {
       this.cycleSortModeBackward();
       this.requestRender();
       return;
@@ -1667,7 +1664,7 @@ class RepoTodosComponent {
 
 export default function repoTodosExtension(pi: ExtensionAPI) {
   const openRepoTodos = async (ctx: ExtensionContext) => {
-    if (!ctx.hasUI) {
+    if (ctx.mode !== "tui") {
       ctx.ui.notify(`/${COMMAND_NAME} requires interactive mode`, "error");
       return;
     }

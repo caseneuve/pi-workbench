@@ -303,7 +303,11 @@ function parseInsertedGroupsFromDiff(
       if (current && current.lines.length > 0) groups.push(current);
       const oldStart = Number.parseInt(hunkMatch[1], 10);
       const oldCount = hunkMatch[2] ? Number.parseInt(hunkMatch[2], 10) : 1;
-      current = { afterBaseIndex: oldStart + oldCount - 2, lines: [] };
+      // A zero-count hunk inserts after oldStart, not before that line.
+      current = {
+        afterBaseIndex: oldStart + Math.max(oldCount, 1) - 2,
+        lines: [],
+      };
       continue;
     }
 
@@ -383,7 +387,10 @@ function anchorForBaseIndex(
   };
 }
 
-function parseReviewComments(base: string, editDiff: string): ReviewComment[] {
+export function parseReviewComments(
+  base: string,
+  editDiff: string,
+): ReviewComment[] {
   const baseLines = base.split(/\r?\n/);
 
   return parseInsertedGroupsFromDiff(editDiff).map((group) => ({
@@ -421,7 +428,7 @@ export default function diffReviewExtension(pi: ExtensionAPI) {
     commandName: string,
   ) {
     try {
-      if (!ctx.hasUI) {
+      if (ctx.mode !== "tui") {
         ctx.ui.notify(`/${commandName} requires interactive mode`, "error");
         return;
       }

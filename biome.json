@@ -23,6 +23,12 @@
     "indentWidth": 2,
     "lineWidth": 120
   },
+  "overrides": [
+    {
+      "includes": ["extensions/**/*.ts", "test/**/*.ts"],
+      "formatter": { "lineWidth": 80 }
+    }
+  ],
   "files": {
     "includes": ["extensions/**/*.ts", "scripts/**/*.mjs", "test/**/*.ts", "!**/node_modules/**/*", "!!**/node_modules"]
   }

@@ -1,7 +1,11 @@
-import {
-  type ExtensionAPI,
-  type ExtensionContext,
-  type Theme,
+import { spawnSync } from "node:child_process";
+import { promises as fs } from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import type {
+  ExtensionAPI,
+  ExtensionContext,
+  Theme,
 } from "@earendil-works/pi-coding-agent";
 import {
   Input,
@@ -11,10 +15,6 @@ import {
   visibleWidth,
   wrapTextWithAnsi,
 } from "@earendil-works/pi-tui";
-import { spawnSync } from "node:child_process";
-import { promises as fs } from "node:fs";
-import os from "node:os";
-import path from "node:path";
 import { appendEditorText } from "./shared/editor-text";
 
 type FocusPane = "list" | "preview";
@@ -465,7 +465,7 @@ function buildPreviewLines(
   return lines;
 }
 
-class AgentJournalComponent {
+export class AgentJournalComponent {
   focused = false;
 
   private entries: JournalEntry[] = [];
@@ -859,7 +859,7 @@ class AgentJournalComponent {
       return;
     }
 
-    if (data === "G") {
+    if (matchesKey(data, "shift+g")) {
       this.pendingG = false;
       if (this.focusPane === "preview") {
         this.previewScroll = Number.MAX_SAFE_INTEGER;
@@ -1114,7 +1114,7 @@ class AgentJournalComponent {
 
 export default function agentJournalExtension(pi: ExtensionAPI) {
   const openAgentJournal = async (ctx: ExtensionContext) => {
-    if (!ctx.hasUI) {
+    if (ctx.mode !== "tui") {
       ctx.ui.notify(`/${COMMAND_NAME} requires interactive mode`, "error");
       return;
     }

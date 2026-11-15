@@ -16,14 +16,17 @@ Do not redesign behavior or expand platform support without an explicit todo.
 
 ## Tooling
 
-- In a newly generated checkout, run `git init -b master && npm install` once, bootstrap anti-slop as described below, and commit the resulting `package-lock.json`. Thereafter use npm and the committed lockfile: `npm ci` for clean installs.
-- Biome owns formatting and baseline linting. Oxlint runs additional extension checks for TypeScript extensions. Use 2-space indentation; do not add Prettier or ESLint.
-- Bootstrap the current anti-slop rules through Dillon Mulroy's upstream skill; do not copy them from another checkout. If `tools/oxlint/anti-slop/index.ts` is absent, run `npx skills add dmmulroy/anti-slop --skill install-anti-slop`, then use the installed `install-anti-slop` skill to configure this repository before changing extension code. The downloaded plugin is local tooling and must remain untracked under `tools/oxlint/anti-slop/`; commit only repository-specific Oxlint configuration and dependency changes.
-- `npm run check` may write safe Biome fixes and requires the locally installed anti-slop plugin. `npm run check:ci` must not modify files and intentionally runs only the committed Biome baseline; CI runs type checking and tests separately, but does not install or run anti-slop.
+- Requires Node >=22.19.0. Use npm and the committed lockfile: `npm ci` for clean installs.
+- Biome owns formatting and baseline linting. Use 2-space indentation; do not add Prettier or ESLint.
+- `npm run check` may write safe Biome fixes; `npm run check:ci` must not modify files. Extra local anti-slop checks remain separate from package scripts and CI; do not vendor rules or install upstream tooling in this package.
 - Prek installs through a guarded `prepare` script during development and runs the mutating Biome check before commits. Production-only Pi Git installs skip hook installation.
 - `npm run typecheck` verifies the pinned development Pi API surface.
 - Use Vitest for tests and V8 coverage for extension code.
 
+
+## Ownership
+
+Manually adopted the portable tooling policy from reviewed Copier master `08350707812e7036ab9477e879c1b029febd552b` (local/unpushed at adoption). `.copier-answers.yml` retains actual generation provenance; no remote Copier update was performed or validated. Application resources, tests, package metadata/lockfile, README, changelog and this file remain repository-owned. Shared tooling updates require review. Keep local `.pi/*` state untracked; `.pi/docs/` may contain reviewed shared notes.
 
 ## Engineering discipline
 
@@ -39,7 +42,7 @@ Do not redesign behavior or expand platform support without an explicit todo.
 
 ## Release procedure
 
-Use npm-compatible CalVer `YYYY.M.D[.PATCH]`; release tags are annotated `v<version>` tags.
+Use three-component unpadded CalVer `YYYY.M.D`; release tags are annotated `v<version>` tags. Agree on valid npm SemVer before a second same-day release; never append a fourth numeric component.
 
 1. Complete automated checks and focused local/Git install validation.
 2. Update `CHANGELOG.md` and `package.json`.
