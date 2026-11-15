@@ -51,19 +51,19 @@ pi install "$DOTAGENTS"
 pi install -l "$DOTAGENTS"
 ```
 
-This handoff is staged only: the native dotagents candidate is on `task/native-pi-resources`; the original active dotagents root has intentionally NOT been cut over. Do not assume its old master exposes this manifest. Adoption, loader reconciliation, soak and original-source retirement require separate approval. Remove obsolete broad skill loaders/old package declarations only as part of that approved adoption; do not install both old workbench skills and the canonical copies and rely on discovery order. Pi warns on duplicate skill names and keeps the first.
+Canonical independent resources are owned by the native dotagents package, not workbench. In its Pi-only layout they live under root `skills/` and `prompts/`. Do not also install old workbench skill copies or parallel runtime-specific copies and rely on discovery order: Pi warns on duplicate skill names and keeps the first. Legacy-source archival, regular-use soak and publication are separate from this ownership handoff.
 
 Pi installation does not modify `PATH`. Workbench no longer owns `install-ag-todo-cli`/`uninstall-ag-todo-cli`; call the canonical helper directly from the target project (or use its `--dir` option):
 
 ```bash
-"$DOTAGENTS/shared/skills/add-todo/ag-todo" new --type chore --slug example --labels migration
-"$DOTAGENTS/shared/skills/add-todo/ag-todo" status 0001 in_progress
-"$DOTAGENTS/shared/skills/add-todo/ag-todo" list --status in_progress
-ORG_JOURNAL_AGENT=pi bb "$DOTAGENTS/shared/skills/org-journal/new-entry.bb" --mkdir
-emacs --batch -Q -l "$DOTAGENTS/shared/skills/org-journal/update-index.el"
+"$DOTAGENTS/skills/add-todo/ag-todo" new --type chore --slug example --labels migration
+"$DOTAGENTS/skills/add-todo/ag-todo" status 0001 in_progress
+"$DOTAGENTS/skills/add-todo/ag-todo" list --status in_progress
+ORG_JOURNAL_AGENT=pi bb "$DOTAGENTS/skills/org-journal/new-entry.bb" --mkdir
+emacs --batch -Q -l "$DOTAGENTS/skills/org-journal/update-index.el"
 ```
 
-The journal metadata helper returns EDN including `:path`, `:date`, `:project` and `:agent`; write the entry at `:path` using the canonical skill's Org template **before** rebuilding the index. Explicit `ORG_JOURNAL_AGENT=pi` preserves Pi identity regardless of checkout location. Resolve helpers beside the discovered canonical `SKILL.md`, not from workbench. Existing user-managed launchers are not modified; in particular an `ag-todo` symlink already pointing to the original dotagents shared helper remains user-owned and is not migrated by this branch.
+The journal metadata helper returns EDN including `:path`, `:date`, `:project` and `:agent`; write the entry at `:path` using the canonical skill's Org template **before** rebuilding the index. Explicit `ORG_JOURNAL_AGENT=pi` preserves Pi identity regardless of checkout location. Resolve helpers beside the discovered canonical `SKILL.md`, not from workbench. No `~/.agents` installation, bootstrap or `~/.local/bin/ag-todo` shim is required. The helper travels with its skill; use its resolved path rather than depending on a global command.
 
 `/repo-todos` reads `NNNN[.N]-slug.md` with title/status/priority/type/labels and relationship metadata; missing labels remain supported and `done`/`closed` retain distinct meanings. `/agent-journal` scans Org entries for TITLE/DATE/FILETAGS and `:LLM_PROJECT:`, excluding `index.org`. Authoring through the canonical helpers and browsing through workbench remain separate capabilities.
 
@@ -78,7 +78,7 @@ Filter resources independently with object package entries. Omit a key to load a
     "extensions": ["extensions/diff-review.ts", "extensions/repo-todos.ts"]
   }, {
     "source": "/absolute/path/to/reviewed-native-dotagents",
-    "skills": ["shared/skills/add-todo"],
+    "skills": ["skills/add-todo"],
     "prompts": []
   }]
 }
