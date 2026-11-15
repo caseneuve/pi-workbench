@@ -99,7 +99,7 @@ npm run test:coverage
 npm run pack:check
 ```
 
-`npm run check` applies Biome formatting and lint fixes. `npm run check:ci` is non-mutating. Extra local anti-slop checks are separate from portable package scripts/CI; no rules are vendored. Tooling policy was manually adopted from reviewed Copier master `0835070` (local/unpushed); original generation provenance remains in `.copier-answers.yml`, not a validated remote update. Canonical helper tests now belong to dotagents; workbench retains extension tests and structural ownership gates. Historical duplicate bytes remain available in Git at `0741860cb8d9a40946594fd4757f07177544b8d8`; removal from this staged package is not authorization to retire original dotagents sources or close the wider ownership cutover.
+`npm run check` applies Biome formatting and lint fixes. `npm run check:ci` is non-mutating. Extra local anti-slop checks are separate from portable package scripts/CI; no rules are vendored. Tooling policy was manually adopted from reviewed Copier master `0835070` (local/unpushed); original generation provenance remains in `.copier-answers.yml`, not a validated remote update. Canonical helper tests now belong to dotagents; workbench retains extension tests and structural ownership gates. Historical duplicate bytes remain available in Git at `0741860cb8d9a40946594fd4757f07177544b8d8`. Canonical skill ownership has been adopted by dotagents; regular-use soak, legacy-source archival and publication retain their separately agreed scope and approvals.
 
 ## License
 
