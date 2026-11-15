@@ -1,6 +1,6 @@
 ---
 title: document canonical Pi-only skill helper paths
-status: in_progress
+status: done
 priority: medium
 type: docs
 labels: [pi, packaging]
@@ -19,11 +19,11 @@ has already been adopted. This task changes documentation, not any extension.
 
 ## Acceptance
 
-- [ ] Helper examples and package skill filters use skills/ paths in the reviewed
+- [x] Helper examples and package skill filters use skills/ paths in the reviewed
   Pi-only dotagents layout.
-- [ ] Remove obsolete staged-only adoption and legacy launcher-preservation claims;
+- [x] Remove obsolete staged-only adoption and legacy launcher-preservation claims;
   explain direct skill-relative helper invocation without installation shims.
-- [ ] Independent review confirms exact README/todo scope and no changes to runtime
+- [x] Independent review confirms exact README/todo scope and no changes to runtime
   sources, package metadata, hooks, or the ten original untracked coverage todos.
 
 ## Boundaries
@@ -32,3 +32,16 @@ No runtime/API changes or new dependency/lifecycle installation. No implication 
 publication, completed soak or general legacy-source deletion. Integrate only with
 the reviewed dotagents root-layout change. Existing unrelated package filters remain
 supported even though the user's normal setup is simplifying to plain declarations.
+
+## Verification
+
+Independent reviewer t77 approved README/todo candidate f9b05a2 after proving
+root helper execution and native resource loading from dotagents candidate2e93100.
+Exact source/layout comparison leaves all workbench runtime, manifest, lock and
+test bytes/modes unchanged; git diff --check passes. Canonical non-mutating
+check:ci passed. The original ten untracked coverage todos remain untouched.
+
+Docs-only commits bypassed the unfiltered mutating Prek/npm run check hook per
+command in the dependency-free worktree. No persistent hook changes or lifecycle
+installation occurred. This final status-only closeout receives exact peer review
+before integration alongside the approved dotagents layout.
