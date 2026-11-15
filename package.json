@@ -1,7 +1,7 @@
 {
   "name": "pi-workbench",
   "version": "0.0.0",
-  "description": "Personal workflow tools and bundled skills for Pi.",
+  "description": "Personal workflow extensions for Pi.",
   "type": "module",
   "license": "MIT",
   "engines": {
@@ -18,9 +18,8 @@
     "README.md",
     "LICENSE",
     "CHANGELOG.md",
-    "scripts",
-    "extensions",
-    "skills"
+    "scripts/install-prek-hook.mjs",
+    "extensions"
   ],
   "pi": {
     "extensions": [
@@ -30,21 +29,18 @@
       "./extensions/cwd-editor.ts",
       "./extensions/attach-screenshot.ts"
     ],
-    "skills": [
-      "./skills"
-    ]
+    "skills": [],
+    "prompts": [],
+    "themes": []
   },
   "scripts": {
     "check": "biome check --write --error-on-warnings .",
     "check:ci": "biome check --error-on-warnings .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:add-todo": "bb --config skills/add-todo/bb.edn -e \"(require 'todo.core-test 'clojure.test) (clojure.test/run-tests 'todo.core-test)\"",
     "test:coverage": "vitest run --coverage",
     "verify": "npm run check:ci && npm run typecheck && npm test",
     "pack:check": "npm pack --dry-run --json",
-    "install-ag-todo-cli": "node scripts/ag-todo-cli-installer.mjs install",
-    "uninstall-ag-todo-cli": "node scripts/ag-todo-cli-installer.mjs uninstall",
     "prepare": "node scripts/install-prek-hook.mjs"
   },
   "peerDependencies": {
