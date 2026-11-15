@@ -30,8 +30,6 @@ test("declares existing in-package resources covered by the files allowlist", ()
   expect(packageJson.files.length).toBeGreaterThan(0);
 
   for (const entries of Object.values(packageJson.pi)) {
-    expect(entries.length).toBeGreaterThan(0);
-
     for (const entry of entries) {
       const path = resolve(repositoryRoot, entry);
       const local = relative(repositoryRoot, path);
@@ -90,10 +88,10 @@ test("provides development gates and ships the lifecycle helper", () => {
   expect(
     existsSync(resolve(repositoryRoot, "scripts/install-prek-hook.mjs")),
   ).toBe(true);
-  expect(packageJson.files).toContain("scripts");
+  expect(packageJson.files).toContain("scripts/install-prek-hook.mjs");
 });
 
-test("retains the five workbench entrypoints and both skills", () => {
+test("retains only the five workbench entrypoints", () => {
   expect(packageJson.pi.extensions).toEqual([
     "./extensions/diff-review.ts",
     "./extensions/repo-todos.ts",
@@ -101,11 +99,26 @@ test("retains the five workbench entrypoints and both skills", () => {
     "./extensions/cwd-editor.ts",
     "./extensions/attach-screenshot.ts",
   ]);
-  expect(packageJson.pi.skills).toEqual(["./skills"]);
+  for (const kind of ["skills", "prompts", "themes"] as const) {
+    expect(packageJson.pi[kind]).toEqual([]);
+    expect(packageJson.files).not.toContain(kind);
+    expect(existsSync(resolve(repositoryRoot, kind))).toBe(false);
+  }
+});
 
-  for (const skill of ["add-todo", "org-journal"]) {
-    expect(
-      existsSync(resolve(repositoryRoot, "skills", skill, "SKILL.md")),
-    ).toBe(true);
+test("leaves independent authoring helpers and CLI installation to dotagents", () => {
+  for (const path of [
+    "scripts/ag-todo-cli-installer.mjs",
+    "scripts/ag-todo-cli-installer.test.mjs",
+  ]) {
+    expect(existsSync(resolve(repositoryRoot, path))).toBe(false);
+    expect(packageJson.files).not.toContain(path);
+  }
+  for (const script of [
+    "test:add-todo",
+    "install-ag-todo-cli",
+    "uninstall-ag-todo-cli",
+  ]) {
+    expect(packageJson.scripts[script]).toBeUndefined();
   }
 });
