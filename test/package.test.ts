@@ -99,6 +99,7 @@ test("retains only the five workbench entrypoints", () => {
     "./extensions/cwd-editor.ts",
     "./extensions/attach-screenshot.ts",
   ]);
+
   for (const kind of ["skills", "prompts", "themes"] as const) {
     expect(packageJson.pi[kind]).toEqual([]);
     expect(packageJson.files).not.toContain(kind);
@@ -114,6 +115,7 @@ test("leaves independent authoring helpers and CLI installation to dotagents", (
     expect(existsSync(resolve(repositoryRoot, path))).toBe(false);
     expect(packageJson.files).not.toContain(path);
   }
+
   for (const script of [
     "test:add-todo",
     "install-ag-todo-cli",
